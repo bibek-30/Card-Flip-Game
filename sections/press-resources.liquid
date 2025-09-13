@@ -1,0 +1,170 @@
+{%- comment -%}
+  Press Resources section
+  - Downloadable assets as cards (admin pastes file URLs from Settings > Files)
+  - Media contact details
+  - Responsive grid
+  - No color pickers per request; only essential content controls
+{%- endcomment -%}
+
+<section id="shopify-section-{{ section.id }}" class="press-resources">
+  <div class="pr-container">
+    <div class="pr-header">
+      {%- if section.settings.kicker != blank -%}
+        <p class="pr-kicker">{{ section.settings.kicker }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="pr-heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="pr-subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="pr-grid">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'resource' -%}
+          <article class="pr-card" {{ block.shopify_attributes }}>
+            <div class="pr-card-body">
+              {%- if block.settings.title != blank -%}
+                <h3 class="pr-card-title">{{ block.settings.title }}</h3>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <p class="pr-card-desc">{{ block.settings.description }}</p>
+              {%- endif -%}
+              {%- if block.settings.meta != blank -%}
+                <p class="pr-card-meta">{{ block.settings.meta }}</p>
+              {%- endif -%}
+            </div>
+            {%- if block.settings.url != blank -%}
+              <a class="pr-card-download" href="{{ block.settings.url }}" target="_blank" rel="noopener" download>
+                {{ block.settings.cta | default: 'Download' }}
+              </a>
+            {%- endif -%}
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.contact_heading or section.settings.contact_name or section.settings.contact_email or section.settings.contact_phone -%}
+      <div class="pr-contact">
+        {%- if section.settings.contact_heading != blank -%}
+          <h3 class="pr-contact-heading">{{ section.settings.contact_heading }}</h3>
+        {%- endif -%}
+        <ul class="pr-contact-list">
+          {%- if section.settings.contact_name != blank -%}
+            <li><span class="pr-contact-label">Name</span><span class="pr-contact-value">{{ section.settings.contact_name }}</span></li>
+          {%- endif -%}
+          {%- if section.settings.contact_email != blank -%}
+            <li><span class="pr-contact-label">Email</span><a class="pr-contact-value" href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a></li>
+          {%- endif -%}
+          {%- if section.settings.contact_phone != blank -%}
+            <li><span class="pr-contact-label">Phone</span><a class="pr-contact-value" href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}">{{ section.settings.contact_phone }}</a></li>
+          {%- endif -%}
+        </ul>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #shopify-section-{{ section.id }}.press-resources .pr-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 64px 20px;
+  }
+  #shopify-section-{{ section.id }} .pr-kicker {
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    opacity: .7;
+    margin: 0 0 8px;
+  }
+  #shopify-section-{{ section.id }} .pr-heading {
+    font-size: clamp(28px, 5vw, 40px);
+    line-height: 1.15;
+    margin: 0 0 8px;
+  }
+  #shopify-section-{{ section.id }} .pr-subheading {
+    font-size: 18px;
+    opacity: .85;
+    margin: 0 0 24px;
+  }
+  #shopify-section-{{ section.id }} .pr-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+  }
+  #shopify-section-{{ section.id }} .pr-card {
+    grid-column: span 4;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.04);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #shopify-section-{{ section.id }} .pr-card-body { padding: 20px; }
+  #shopify-section-{{ section.id }} .pr-card-title { margin: 0 0 8px; font-size: 18px; }
+  #shopify-section-{{ section.id }} .pr-card-desc { margin: 0 0 10px; opacity: .85; }
+  #shopify-section-{{ section.id }} .pr-card-meta { margin: 0 0 14px; font-size: 12px; opacity: .6; }
+  #shopify-section-{{ section.id }} .pr-card-download {
+    margin: 0 20px 20px;
+    align-self: start;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 10px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    transition: filter .2s ease;
+  }
+  #shopify-section-{{ section.id }} .pr-card-download:hover { filter: brightness(.95); }
+
+  #shopify-section-{{ section.id }} .pr-contact { margin-top: 32px; border-top: 1px solid rgba(0,0,0,.07); padding-top: 20px; }
+  #shopify-section-{{ section.id }} .pr-contact-heading { margin: 0 0 10px; font-size: 20px; }
+  #shopify-section-{{ section.id }} .pr-contact-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  #shopify-section-{{ section.id }} .pr-contact-label { display: block; font-size: 12px; opacity: .6; }
+  #shopify-section-{{ section.id }} .pr-contact-value { display: block; font-size: 16px; text-decoration: none; color: inherit; }
+
+  @media (max-width: 1024px) {
+    #shopify-section-{{ section.id }} .pr-card { grid-column: span 6; }
+  }
+  @media (max-width: 680px) {
+    #shopify-section-{{ section.id }} .pr-card { grid-column: span 12; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Press resources",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Press resources" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Logos, product shots, and brand assets" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Download official files for editorial use." },
+    { "type": "text", "id": "contact_heading", "label": "Media contact heading", "default": "Media contact" },
+    { "type": "text", "id": "contact_name", "label": "Contact name", "default": "Jane Doe" },
+    { "type": "text", "id": "contact_email", "label": "Contact email", "default": "press@example.com" },
+    { "type": "text", "id": "contact_phone", "label": "Contact phone", "default": "+1 (555) 123-4567" }
+  ],
+  "blocks": [
+    {
+      "type": "resource",
+      "name": "Resource card",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Brand kit (ZIP)" },
+        { "type": "text", "id": "description", "label": "Description", "default": "Logos, typography, colors, and usage guide." },
+        { "type": "text", "id": "meta", "label": "Meta (file size, format)", "default": "52 MB • .zip" },
+        { "type": "url", "id": "url", "label": "File URL" },
+        { "type": "text", "id": "cta", "label": "Button label", "default": "Download" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Press resources", "blocks": [ { "type": "resource" }, { "type": "resource" }, { "type": "resource" } ] }
+  ]
+}
+{% endschema %}
+

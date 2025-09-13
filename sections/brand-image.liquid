@@ -1,0 +1,81 @@
+{%- comment -%}
+  Brand Image Hero
+  - Large image (desktop + mobile), optional eyebrow, heading, subcopy, CTA
+  - Responsive and customizable content
+{%- endcomment -%}
+
+<section id="shopify-section-{{ section.id }}" class="brand-image">
+  <div class="bi-container">
+    <div class="bi-media">
+      {%- if section.settings.image != blank -%}
+        <picture>
+          {%- if section.settings.image_mobile != blank -%}
+            <source media="(max-width: 768px)" srcset="{{ section.settings.image_mobile | image_url: width: 900 }} 900w, {{ section.settings.image_mobile | image_url: width: 600 }} 600w">
+          {%- endif -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1600 }}"
+            srcset="{{ section.settings.image | image_url: width: 800 }} 800w, {{ section.settings.image | image_url: width: 1200 }} 1200w, {{ section.settings.image | image_url: width: 1600 }} 1600w"
+            sizes="(max-width: 900px) 100vw, 50vw"
+            alt="{{ section.settings.image.alt | escape }}"
+            loading="lazy"
+          >
+        </picture>
+      {%- else -%}
+        <div class="bi-placeholder"></div>
+      {%- endif -%}
+    </div>
+    <div class="bi-content">
+      {%- if section.settings.kicker != blank -%}
+        <p class="bi-kicker">{{ section.settings.kicker }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="bi-heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subcopy != blank -%}
+        <p class="bi-subcopy">{{ section.settings.subcopy }}</p>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <a class="bi-cta" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #shopify-section-{{ section.id }}.brand-image .bi-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 56px 20px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  #shopify-section-{{ section.id }} .bi-media img { display: block; width: 100%; height: auto; border-radius: 16px; }
+  #shopify-section-{{ section.id }} .bi-placeholder { width: 100%; padding-top: 60%; background: #f1f1f1; border-radius: 16px; }
+  #shopify-section-{{ section.id }} .bi-kicker { text-transform: uppercase; letter-spacing: .08em; opacity: .7; margin: 0 0 8px; }
+  #shopify-section-{{ section.id }} .bi-heading { font-size: clamp(28px, 5vw, 44px); line-height: 1.15; margin: 0 0 12px; }
+  #shopify-section-{{ section.id }} .bi-subcopy { font-size: 18px; opacity: .85; margin: 0 0 18px; }
+  #shopify-section-{{ section.id }} .bi-cta { display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 18px; background: #111; color: #fff; border-radius: 10px; text-decoration: none; }
+
+  @media (max-width: 960px) {
+    #shopify-section-{{ section.id }}.brand-image .bi-container { grid-template-columns: 1fr; gap: 24px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Brand image",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Brand" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "High‑resolution brand photography" },
+    { "type": "text", "id": "subcopy", "label": "Subcopy", "default": "Download and use these images in your editorial coverage." },
+    { "type": "image_picker", "id": "image", "label": "Desktop image" },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile image" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Download kit" }
+  ],
+  "presets": [ { "name": "Brand image" } ]
+}
+{% endschema %}
+

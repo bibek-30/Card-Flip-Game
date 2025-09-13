@@ -1,0 +1,91 @@
+{%- comment -%}
+  Featured Press Logos
+  - Horizontal marquee of press logos with optional links
+  - Pauses on hover; accessible controls; responsive
+{%- endcomment -%}
+
+<section id="shopify-section-{{ section.id }}" class="featured-press">
+  <div class="fp-container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="fp-heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    <div class="fp-marquee" data-speed="{{ section.settings.speed }}">
+      <div class="fp-track">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'logo' -%}
+            <div class="fp-item" {{ block.shopify_attributes }}>
+              {%- assign image = block.settings.image -%}
+              {%- if image != blank -%}
+                {%- if block.settings.url != blank -%}
+                  <a href="{{ block.settings.url }}" target="_blank" rel="noopener" aria-label="{{ block.settings.alt | default: image.alt | escape }}">
+                {%- endif -%}
+                <img src="{{ image | image_url: width: 320 }}"
+                     srcset="{{ image | image_url: width: 160 }} 160w, {{ image | image_url: width: 240 }} 240w, {{ image | image_url: width: 320 }} 320w"
+                     sizes="(max-width: 700px) 33vw, 160px"
+                     alt="{{ block.settings.alt | default: image.alt | escape }}"
+                     loading="lazy">
+                {%- if block.settings.url != blank -%}</a>{%- endif -%}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- comment -%} duplicate for seamless loop {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'logo' -%}
+            <div class="fp-item fp-dup">
+              {%- assign image = block.settings.image -%}
+              {%- if image != blank -%}
+                <img src="{{ image | image_url: width: 320 }}" alt="" aria-hidden="true" loading="lazy">
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #shopify-section-{{ section.id }}.featured-press .fp-container { max-width: 1200px; margin: 0 auto; padding: 56px 20px; }
+  #shopify-section-{{ section.id }} .fp-heading { text-align: center; font-size: clamp(22px, 3.6vw, 28px); margin: 0 0 18px; opacity: .85; }
+  #shopify-section-{{ section.id }} .fp-marquee { overflow: hidden; position: relative; }
+  #shopify-section-{{ section.id }} .fp-track { display: flex; gap: 36px; align-items: center; will-change: transform; animation: fp-scroll var(--fp-speed, 25s) linear infinite; }
+  #shopify-section-{{ section.id }} .fp-item { flex: 0 0 auto; width: 160px; opacity: .9; filter: grayscale(100%); transition: opacity .2s ease, filter .2s ease; }
+  #shopify-section-{{ section.id }} .fp-item img { width: 100%; height: auto; display: block; }
+  #shopify-section-{{ section.id }} .fp-item:hover { opacity: 1; filter: grayscale(0%); }
+  #shopify-section-{{ section.id }} .fp-marquee:hover .fp-track { animation-play-state: paused; }
+
+  @keyframes fp-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  #shopify-section-{{ section.id }} .fp-track { --fp-speed: {{ section.settings.speed | default: 25 }}s; }
+</style>
+
+<script>
+  (function(){
+    var root = document.getElementById('shopify-section-{{ section.id }}');
+    if (!root) return;
+    // Nothing needed right now; CSS handles marquee. Could add reduced motion support:
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var track = root.querySelector('.fp-track');
+      if (track) track.style.animation = 'none';
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Featured press",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "As featured in" },
+    { "type": "range", "id": "speed", "label": "Scroll duration (s)", "min": 10, "max": 60, "step": 1, "default": 25 }
+  ],
+  "blocks": [
+    { "type": "logo", "name": "Logo", "settings": [ { "type": "image_picker", "id": "image", "label": "Logo image" }, { "type": "text", "id": "alt", "label": "Alt text" }, { "type": "url", "id": "url", "label": "Optional link" } ] }
+  ],
+  "presets": [ { "name": "Featured press", "blocks": [ { "type": "logo" }, { "type": "logo" }, { "type": "logo" }, { "type": "logo" }, { "type": "logo" }, { "type": "logo" } ] } ]
+}
+{% endschema %}
+
