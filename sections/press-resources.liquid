@@ -1,0 +1,102 @@
+{%- comment -%}
+  Press Resources section
+  - Downloadable assets as cards (admin pastes file URLs from Settings > Files)
+  - Media contact details
+  - Responsive grid
+  - No color pickers per request; only essential content controls
+{%- endcomment -%}
+
+<section id="shopify-section-{{ section.id }}" class="press-resources">
+  <div class="page-width pr-container">
+    <div class="title-wrapper-with-link">
+      {%- if section.settings.kicker != blank -%}
+        <p class="pr-kicker">{{ section.settings.kicker }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="pr-heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <div class="subtitle">{{ section.settings.subheading }}</div>
+      {%- endif -%}
+    </div>
+
+    <div class="grid grid--3-col-desktop grid--2-col-tablet grid--1-col">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'resource' -%}
+          <div class="grid__item" {{ block.shopify_attributes }}>
+            <article class="card">
+              <div class="card__content">
+                {%- if block.settings.title != blank -%}
+                  <h3 class="card__heading">{{ block.settings.title }}</h3>
+                {%- endif -%}
+                {%- if block.settings.description != blank -%}
+                  <p class="card__information">{{ block.settings.description }}</p>
+                {%- endif -%}
+                {%- if block.settings.meta != blank -%}
+                  <p class="caption-with-letter-spacing">{{ block.settings.meta }}</p>
+                {%- endif -%}
+                {%- if block.settings.url != blank -%}
+                  <a class="button" href="{{ block.settings.url }}" target="_blank" rel="noopener" download>
+                    {{ block.settings.cta | default: 'Download' }}
+                  </a>
+                {%- endif -%}
+              </div>
+            </article>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.contact_heading or section.settings.contact_name or section.settings.contact_email or section.settings.contact_phone -%}
+      <div class="content-container">
+        {%- if section.settings.contact_heading != blank -%}
+          <h3 class="title">{{ section.settings.contact_heading }}</h3>
+        {%- endif -%}
+        <ul class="list-unstyled">
+          {%- if section.settings.contact_name != blank -%}
+            <li><span class="caption-with-letter-spacing">Name</span><div>{{ section.settings.contact_name }}</div></li>
+          {%- endif -%}
+          {%- if section.settings.contact_email != blank -%}
+            <li><span class="caption-with-letter-spacing">Email</span><div><a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a></div></li>
+          {%- endif -%}
+          {%- if section.settings.contact_phone != blank -%}
+            <li><span class="caption-with-letter-spacing">Phone</span><div><a href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}">{{ section.settings.contact_phone }}</a></div></li>
+          {%- endif -%}
+        </ul>
+      </div>
+    {%- endif -%}
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Press resources",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Press resources" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Logos, product shots, and brand assets" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Download official files for editorial use." },
+    { "type": "text", "id": "contact_heading", "label": "Media contact heading", "default": "Media contact" },
+    { "type": "text", "id": "contact_name", "label": "Contact name", "default": "Jane Doe" },
+    { "type": "text", "id": "contact_email", "label": "Contact email", "default": "press@example.com" },
+    { "type": "text", "id": "contact_phone", "label": "Contact phone", "default": "+1 (555) 123-4567" }
+  ],
+  "blocks": [
+    {
+      "type": "resource",
+      "name": "Resource card",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Brand kit (ZIP)" },
+        { "type": "text", "id": "description", "label": "Description", "default": "Logos, typography, colors, and usage guide." },
+        { "type": "text", "id": "meta", "label": "Meta (file size, format)", "default": "52 MB • .zip" },
+        { "type": "url", "id": "url", "label": "File URL" },
+        { "type": "text", "id": "cta", "label": "Button label", "default": "Download" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Press resources", "blocks": [ { "type": "resource" }, { "type": "resource" }, { "type": "resource" } ] }
+  ]
+}
+{% endschema %}
+
