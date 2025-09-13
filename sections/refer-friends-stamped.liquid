@@ -1,0 +1,355 @@
+{%- comment -%}
+  Refer Friends section integrated with Stamped.io Referral Modal
+
+  - Dynamic content via section settings
+  - Responsive two-column layout (stacks on mobile)
+  - Custom form (first name + email)
+  - On submit, ensures Stamped widget is loaded, opens Referral Modal,
+    and attempts to prefill friend email/name for quick invite
+  - Hidden Stamped widget container included with current customer context
+
+  Notes:
+  - Requires Stamped Loyalty/Rewards app installed and their front-end script available
+  - This section attempts to load the widget script if missing
+{%- endcomment -%}
+
+<section id="shopify-section-{{ section.id }}" class="rf-stamped-section" style="background-color: {{ section.settings.background | default: '#efe6db' }};">
+  <div class="rf-container">
+    <div class="rf-left">
+      {%- if section.settings.kicker != blank -%}
+        <p class="rf-kicker">{{ section.settings.kicker }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="rf-heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="rf-subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+      {%- if section.settings.description != blank -%}
+        <div class="rf-description rte">{{ section.settings.description }}</div>
+      {%- endif -%}
+    </div>
+
+    <div class="rf-right">
+      <form class="rf-form" id="rf-form-{{ section.id }}" novalidate>
+        <div class="rf-form-row">
+          <label class="rf-label" for="rf-first-name-{{ section.id }}">{{ section.settings.first_name_label }}</label>
+          <input class="rf-input" id="rf-first-name-{{ section.id }}" name="first_name" type="text" placeholder="{{ section.settings.first_name_placeholder }}" autocomplete="given-name" required>
+        </div>
+        <div class="rf-form-row">
+          <label class="rf-label" for="rf-email-{{ section.id }}">{{ section.settings.email_label }}</label>
+          <input class="rf-input" id="rf-email-{{ section.id }}" name="email" type="email" placeholder="{{ section.settings.email_placeholder }}" autocomplete="email" required>
+        </div>
+        <button class="rf-submit" type="submit" aria-live="polite">{{ section.settings.button_label }}</button>
+        {%- if section.settings.fine_print != blank -%}
+          <p class="rf-fine-print">{{ section.settings.fine_print }}</p>
+        {%- endif -%}
+        <p class="rf-feedback" id="rf-feedback-{{ section.id }}" role="status" aria-live="polite" hidden></p>
+      </form>
+    </div>
+  </div>
+
+  {%- comment -%}
+    Hidden Stamped referral modal widget container.
+    Stamped will use the logged-in customer context for referral attribution.
+  {%- endcomment -%}
+  <div id="rf-stamped-modal-{{ section.id }}"
+       data-widget-type="rewards-referral-modal"
+       data-customer-email="{{ customer.email }}"
+       data-customer-first-name="{{ customer.first_name }}"
+       style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;">
+  </div>
+</section>
+
+<style>
+  #shopify-section-{{ section.id }}.rf-stamped-section {
+    color: {{ section.settings.text_color | default: '#1a1a1a' }};
+  }
+  #shopify-section-{{ section.id }} .rf-container {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 48px;
+    max-width: {{ section.settings.max_width | default: '1200px' }};
+    margin: 0 auto;
+    padding: 56px 20px;
+  }
+  #shopify-section-{{ section.id }} .rf-kicker {
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .7;
+    margin: 0 0 8px;
+  }
+  #shopify-section-{{ section.id }} .rf-heading {
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1.12;
+    margin: 0 0 12px;
+  }
+  #shopify-section-{{ section.id }} .rf-subheading {
+    font-size: clamp(20px, 3.2vw, 28px);
+    margin: 0 0 16px;
+    opacity: .85;
+  }
+  #shopify-section-{{ section.id }} .rf-description {
+    font-size: 18px;
+    line-height: 1.6;
+    opacity: .9;
+  }
+  #shopify-section-{{ section.id }} .rf-right {
+    align-self: center;
+  }
+  #shopify-section-{{ section.id }} .rf-form {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.06);
+  }
+  #shopify-section-{{ section.id }} .rf-form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+  #shopify-section-{{ section.id }} .rf-label {
+    font-size: 14px;
+    margin-bottom: 6px;
+    opacity: .8;
+  }
+  #shopify-section-{{ section.id }} .rf-input {
+    height: 48px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,.12);
+    padding: 0 14px;
+    font-size: 16px;
+    outline: none;
+    transition: box-shadow .2s ease, border-color .2s ease;
+  }
+  #shopify-section-{{ section.id }} .rf-input:focus {
+    border-color: {{ section.settings.accent | default: '#e56f4a' }};
+    box-shadow: 0 0 0 4px color-mix(in srgb, {{ section.settings.accent | default: '#e56f4a' }} 20%, transparent);
+  }
+  #shopify-section-{{ section.id }} .rf-submit {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+    border: 0;
+    border-radius: 10px;
+    background: {{ section.settings.button_bg | default: '#ef7a56' }};
+    color: {{ section.settings.button_color | default: '#ffffff' }};
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform .04s ease, filter .2s ease;
+  }
+  #shopify-section-{{ section.id }} .rf-submit:hover {
+    filter: brightness(0.98);
+  }
+  #shopify-section-{{ section.id }} .rf-submit:active {
+    transform: translateY(1px);
+  }
+  #shopify-section-{{ section.id }} .rf-fine-print {
+    font-size: 12px;
+    line-height: 1.5;
+    opacity: .7;
+    margin-top: 12px;
+  }
+  #shopify-section-{{ section.id }} .rf-feedback {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  @media (max-width: 980px) {
+    #shopify-section-{{ section.id }} .rf-container {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 28px 16px;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    var sectionId = {{ section.id | json }};
+    var formId = 'rf-form-' + sectionId;
+    var feedbackId = 'rf-feedback-' + sectionId;
+    var stampedWidgetId = 'rf-stamped-modal-' + sectionId;
+
+    function setFeedback(message, isError) {
+      var el = document.getElementById(feedbackId);
+      if (!el) return;
+      el.textContent = message || '';
+      el.hidden = !message;
+      el.style.color = isError ? '#b42318' : '#2e7d32';
+    }
+
+    function isValidEmail(email) {
+      return /[^\s@]+@[^\s@]+\.[^\s@]+/.test(email);
+    }
+
+    function waitFor(conditionFn, options) {
+      var timeout = (options && options.timeout) || 8000;
+      var interval = (options && options.interval) || 100;
+      var start = Date.now();
+      return new Promise(function(resolve, reject) {
+        (function check() {
+          try {
+            var result = conditionFn();
+            if (result) return resolve(result);
+          } catch (e) {}
+          if (Date.now() - start >= timeout) return reject(new Error('Timeout waiting for condition'));
+          setTimeout(check, interval);
+        })();
+      });
+    }
+
+    function ensureStampedLoaded() {
+      return new Promise(function(resolve) {
+        if (window.StampedFn) return resolve();
+
+        var existing = document.querySelector('script[src*="cdn-stamped-io"], script[src*="stamped.io"], script[src*="stamped" i]');
+        if (existing) {
+          return waitFor(function(){ return window.StampedFn; }, { timeout: 10000 }).then(resolve).catch(function(){ resolve(); });
+        }
+
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://cdn-stamped-io.azureedge.net/files/widget.min.js';
+        s.onload = function() {
+          // Allow widget to initialize and scan DOM
+          setTimeout(function(){
+            if (window.StampedFn && typeof window.StampedFn.load === 'function') {
+              try { window.StampedFn.load(); } catch(e) {}
+            }
+            resolve();
+          }, 50);
+        };
+        s.onerror = function(){ resolve(); };
+        document.head.appendChild(s);
+      });
+    }
+
+    function openReferralModalAndPrefill(friend) {
+      var widgetHost = document.getElementById(stampedWidgetId);
+      if (!widgetHost) return Promise.reject(new Error('Missing Stamped referral widget container'));
+
+      // Attempt to trigger the modal by clicking the first interactive element rendered by Stamped
+      function clickOpen() {
+        var trigger = widgetHost.querySelector('button, a');
+        if (trigger) { trigger.click(); return true; }
+        return false;
+      }
+
+      // In case Stamped hasn't hydrated yet, try to nudge it
+      if (window.StampedFn && typeof window.StampedFn.load === 'function') {
+        try { window.StampedFn.load(); } catch(e) {}
+      }
+      clickOpen();
+
+      // Try repeatedly for a short while
+      var opened = false;
+      var attempts = 0;
+      var openerTimer = setInterval(function(){
+        if (opened || attempts > 30) { clearInterval(openerTimer); return; }
+        attempts += 1;
+        opened = clickOpen();
+      }, 100);
+
+      // After the modal is present, try to prefill the friend inputs
+      return waitFor(function(){
+        return document.querySelector('.stamped, .stamped-container, [class*="stamped"]');
+      }, { timeout: 8000 }).then(function(){
+        try {
+          var possibleModal = document.querySelector('.stamped-modal, .stamped-container');
+          var emailInput = possibleModal && possibleModal.querySelector('input[type="email"]');
+          if (emailInput && friend && friend.email) {
+            emailInput.value = friend.email;
+            emailInput.dispatchEvent(new Event('input', { bubbles: true }));
+            emailInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          var nameInput = possibleModal && possibleModal.querySelector('input[type="text"]');
+          if (nameInput && friend && friend.firstName) {
+            nameInput.value = friend.firstName;
+            nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+            nameInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        } catch(e) {}
+      });
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      setFeedback('', false);
+
+      var form = event.target;
+      var firstName = form.querySelector('#rf-first-name-' + sectionId).value.trim();
+      var email = form.querySelector('#rf-email-' + sectionId).value.trim().toLowerCase();
+
+      if (!isValidEmail(email)) {
+        setFeedback({{ section.settings.validation_invalid_email | json }}, true);
+        return;
+      }
+
+      setFeedback({{ section.settings.status_loading | json }}, false);
+
+      ensureStampedLoaded()
+        .then(function(){
+          return openReferralModalAndPrefill({ email: email, firstName: firstName });
+        })
+        .then(function(){
+          setFeedback({{ section.settings.status_opened | json }}, false);
+        })
+        .catch(function(){
+          try {
+            // Fallback: copy email to clipboard so the user can paste in the modal
+            if (navigator.clipboard && email) navigator.clipboard.writeText(email);
+          } catch(e) {}
+          setFeedback({{ section.settings.status_fallback | json }}, false);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+      var form = document.getElementById(formId);
+      if (form) {
+        form.addEventListener('submit', handleSubmit);
+      }
+
+      // Proactively initialize Stamped if present
+      if (window.StampedFn && typeof window.StampedFn.load === 'function') {
+        try { window.StampedFn.load(); } catch(e) {}
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Refer friends (Stamped)",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Help friends and save. Win–win." },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Give friends 20% off. Get 20% off yourself." },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Refer friends and you’ll get 20% off your order. They get 20% off too." },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Our very best offer. Get started below.</p>" },
+    { "type": "color", "id": "background", "label": "Background color", "default": "#f2e9e0" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#1a1a1a" },
+    { "type": "color", "id": "accent", "label": "Accent color", "default": "#ef7a56" },
+    { "type": "text", "id": "max_width", "label": "Max width", "default": "1200px" },
+
+    { "type": "text", "id": "first_name_label", "label": "First name label", "default": "First Name" },
+    { "type": "text", "id": "first_name_placeholder", "label": "First name placeholder", "default": "First Name" },
+    { "type": "text", "id": "email_label", "label": "Email label", "default": "Email" },
+    { "type": "text", "id": "email_placeholder", "label": "Email" , "default": "Email"},
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Invite Friends" },
+    { "type": "richtext", "id": "fine_print", "label": "Fine print", "default": "<p>Qualified referrals subject to Terms and Conditions. Each referral code must be applied to a separate order.</p>" },
+    { "type": "color", "id": "button_bg", "label": "Button background", "default": "#ef7a56" },
+    { "type": "color", "id": "button_color", "label": "Button text color", "default": "#ffffff" },
+
+    { "type": "text", "id": "validation_invalid_email", "label": "Validation – invalid email", "default": "Please enter a valid email address." },
+    { "type": "text", "id": "status_loading", "label": "Status – loading", "default": "Opening referral…" },
+    { "type": "text", "id": "status_opened", "label": "Status – opened", "default": "Referral window opened. Finish sending your invite there." },
+    { "type": "text", "id": "status_fallback", "label": "Status – fallback", "default": "We opened the referral widget. If the email wasn’t filled, paste it inside." }
+  ],
+  "presets": [
+    { "name": "Refer friends (Stamped)" }
+  ]
+}
+{% endschema %}
+
