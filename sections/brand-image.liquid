@@ -5,7 +5,7 @@
 {%- endcomment -%}
 
 <section id="shopify-section-{{ section.id }}" class="brand-image">
-  <div class="bi-container">
+  <div class="page-width bi-container">
     <div class="bi-media">
       {%- if section.settings.image != blank -%}
         <picture>
@@ -39,29 +39,8 @@
       {%- endif -%}
     </div>
   </div>
+
 </section>
-
-<style>
-  #shopify-section-{{ section.id }}.brand-image .bi-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 56px 20px;
-    display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 48px;
-    align-items: center;
-  }
-  #shopify-section-{{ section.id }} .bi-media img { display: block; width: 100%; height: auto; border-radius: 16px; }
-  #shopify-section-{{ section.id }} .bi-placeholder { width: 100%; padding-top: 60%; background: #f1f1f1; border-radius: 16px; }
-  #shopify-section-{{ section.id }} .bi-kicker { text-transform: uppercase; letter-spacing: .08em; opacity: .7; margin: 0 0 8px; }
-  #shopify-section-{{ section.id }} .bi-heading { font-size: clamp(28px, 5vw, 44px); line-height: 1.15; margin: 0 0 12px; }
-  #shopify-section-{{ section.id }} .bi-subcopy { font-size: 18px; opacity: .85; margin: 0 0 18px; }
-  #shopify-section-{{ section.id }} .bi-cta { display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 18px; background: #111; color: #fff; border-radius: 10px; text-decoration: none; }
-
-  @media (max-width: 960px) {
-    #shopify-section-{{ section.id }}.brand-image .bi-container { grid-template-columns: 1fr; gap: 24px; }
-  }
-</style>
 
 {% schema %}
 {

@@ -7,7 +7,7 @@
 {%- endcomment -%}
 
 <section id="shopify-section-{{ section.id }}" class="press-resources">
-  <div class="pr-container">
+  <div class="page-width pr-container">
     <div class="pr-header">
       {%- if section.settings.kicker != blank -%}
         <p class="pr-kicker">{{ section.settings.kicker }}</p>
@@ -64,78 +64,8 @@
       </div>
     {%- endif -%}
   </div>
+
 </section>
-
-<style>
-  #shopify-section-{{ section.id }}.press-resources .pr-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 64px 20px;
-  }
-  #shopify-section-{{ section.id }} .pr-kicker {
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    opacity: .7;
-    margin: 0 0 8px;
-  }
-  #shopify-section-{{ section.id }} .pr-heading {
-    font-size: clamp(28px, 5vw, 40px);
-    line-height: 1.15;
-    margin: 0 0 8px;
-  }
-  #shopify-section-{{ section.id }} .pr-subheading {
-    font-size: 18px;
-    opacity: .85;
-    margin: 0 0 24px;
-  }
-  #shopify-section-{{ section.id }} .pr-grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 16px;
-  }
-  #shopify-section-{{ section.id }} .pr-card {
-    grid-column: span 4;
-    background: #fff;
-    border: 1px solid rgba(0,0,0,.06);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,.04);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  #shopify-section-{{ section.id }} .pr-card-body { padding: 20px; }
-  #shopify-section-{{ section.id }} .pr-card-title { margin: 0 0 8px; font-size: 18px; }
-  #shopify-section-{{ section.id }} .pr-card-desc { margin: 0 0 10px; opacity: .85; }
-  #shopify-section-{{ section.id }} .pr-card-meta { margin: 0 0 14px; font-size: 12px; opacity: .6; }
-  #shopify-section-{{ section.id }} .pr-card-download {
-    margin: 0 20px 20px;
-    align-self: start;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 44px;
-    padding: 0 14px;
-    border-radius: 10px;
-    background: #111;
-    color: #fff;
-    text-decoration: none;
-    transition: filter .2s ease;
-  }
-  #shopify-section-{{ section.id }} .pr-card-download:hover { filter: brightness(.95); }
-
-  #shopify-section-{{ section.id }} .pr-contact { margin-top: 32px; border-top: 1px solid rgba(0,0,0,.07); padding-top: 20px; }
-  #shopify-section-{{ section.id }} .pr-contact-heading { margin: 0 0 10px; font-size: 20px; }
-  #shopify-section-{{ section.id }} .pr-contact-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
-  #shopify-section-{{ section.id }} .pr-contact-label { display: block; font-size: 12px; opacity: .6; }
-  #shopify-section-{{ section.id }} .pr-contact-value { display: block; font-size: 16px; text-decoration: none; color: inherit; }
-
-  @media (max-width: 1024px) {
-    #shopify-section-{{ section.id }} .pr-card { grid-column: span 6; }
-  }
-  @media (max-width: 680px) {
-    #shopify-section-{{ section.id }} .pr-card { grid-column: span 12; }
-  }
-</style>
 
 {% schema %}
 {
