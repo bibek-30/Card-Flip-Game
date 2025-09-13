@@ -8,7 +8,7 @@
 
 <section id="shopify-section-{{ section.id }}" class="press-resources">
   <div class="page-width pr-container">
-    <div class="pr-header">
+    <div class="title-wrapper-with-link">
       {%- if section.settings.kicker != blank -%}
         <p class="pr-kicker">{{ section.settings.kicker }}</p>
       {%- endif -%}
@@ -16,49 +16,51 @@
         <h2 class="pr-heading">{{ section.settings.heading }}</h2>
       {%- endif -%}
       {%- if section.settings.subheading != blank -%}
-        <p class="pr-subheading">{{ section.settings.subheading }}</p>
+        <div class="subtitle">{{ section.settings.subheading }}</div>
       {%- endif -%}
     </div>
 
-    <div class="pr-grid">
+    <div class="grid grid--3-col-desktop grid--2-col-tablet grid--1-col">
       {%- for block in section.blocks -%}
         {%- if block.type == 'resource' -%}
-          <article class="pr-card" {{ block.shopify_attributes }}>
-            <div class="pr-card-body">
-              {%- if block.settings.title != blank -%}
-                <h3 class="pr-card-title">{{ block.settings.title }}</h3>
-              {%- endif -%}
-              {%- if block.settings.description != blank -%}
-                <p class="pr-card-desc">{{ block.settings.description }}</p>
-              {%- endif -%}
-              {%- if block.settings.meta != blank -%}
-                <p class="pr-card-meta">{{ block.settings.meta }}</p>
-              {%- endif -%}
-            </div>
-            {%- if block.settings.url != blank -%}
-              <a class="pr-card-download" href="{{ block.settings.url }}" target="_blank" rel="noopener" download>
-                {{ block.settings.cta | default: 'Download' }}
-              </a>
-            {%- endif -%}
-          </article>
+          <div class="grid__item" {{ block.shopify_attributes }}>
+            <article class="card">
+              <div class="card__content">
+                {%- if block.settings.title != blank -%}
+                  <h3 class="card__heading">{{ block.settings.title }}</h3>
+                {%- endif -%}
+                {%- if block.settings.description != blank -%}
+                  <p class="card__information">{{ block.settings.description }}</p>
+                {%- endif -%}
+                {%- if block.settings.meta != blank -%}
+                  <p class="caption-with-letter-spacing">{{ block.settings.meta }}</p>
+                {%- endif -%}
+                {%- if block.settings.url != blank -%}
+                  <a class="button" href="{{ block.settings.url }}" target="_blank" rel="noopener" download>
+                    {{ block.settings.cta | default: 'Download' }}
+                  </a>
+                {%- endif -%}
+              </div>
+            </article>
+          </div>
         {%- endif -%}
       {%- endfor -%}
     </div>
 
     {%- if section.settings.contact_heading or section.settings.contact_name or section.settings.contact_email or section.settings.contact_phone -%}
-      <div class="pr-contact">
+      <div class="content-container">
         {%- if section.settings.contact_heading != blank -%}
-          <h3 class="pr-contact-heading">{{ section.settings.contact_heading }}</h3>
+          <h3 class="title">{{ section.settings.contact_heading }}</h3>
         {%- endif -%}
-        <ul class="pr-contact-list">
+        <ul class="list-unstyled">
           {%- if section.settings.contact_name != blank -%}
-            <li><span class="pr-contact-label">Name</span><span class="pr-contact-value">{{ section.settings.contact_name }}</span></li>
+            <li><span class="caption-with-letter-spacing">Name</span><div>{{ section.settings.contact_name }}</div></li>
           {%- endif -%}
           {%- if section.settings.contact_email != blank -%}
-            <li><span class="pr-contact-label">Email</span><a class="pr-contact-value" href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a></li>
+            <li><span class="caption-with-letter-spacing">Email</span><div><a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a></div></li>
           {%- endif -%}
           {%- if section.settings.contact_phone != blank -%}
-            <li><span class="pr-contact-label">Phone</span><a class="pr-contact-value" href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}">{{ section.settings.contact_phone }}</a></li>
+            <li><span class="caption-with-letter-spacing">Phone</span><div><a href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}">{{ section.settings.contact_phone }}</a></div></li>
           {%- endif -%}
         </ul>
       </div>

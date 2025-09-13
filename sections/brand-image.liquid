@@ -5,8 +5,8 @@
 {%- endcomment -%}
 
 <section id="shopify-section-{{ section.id }}" class="brand-image">
-  <div class="page-width bi-container">
-    <div class="bi-media">
+  <div class="page-width bi-container grid grid--2-col-desktop grid--1-col">
+    <div class="grid__item bi-media">
       {%- if section.settings.image != blank -%}
         <picture>
           {%- if section.settings.image_mobile != blank -%}
@@ -24,18 +24,18 @@
         <div class="bi-placeholder"></div>
       {%- endif -%}
     </div>
-    <div class="bi-content">
+    <div class="grid__item bi-content">
       {%- if section.settings.kicker != blank -%}
         <p class="bi-kicker">{{ section.settings.kicker }}</p>
       {%- endif -%}
       {%- if section.settings.heading != blank -%}
-        <h2 class="bi-heading">{{ section.settings.heading }}</h2>
+        <h2 class="title h1">{{ section.settings.heading }}</h2>
       {%- endif -%}
       {%- if section.settings.subcopy != blank -%}
-        <p class="bi-subcopy">{{ section.settings.subcopy }}</p>
+        <div class="rte">{{ section.settings.subcopy }}</div>
       {%- endif -%}
       {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
-        <a class="bi-cta" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+        <a class="button" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
       {%- endif -%}
     </div>
   </div>
